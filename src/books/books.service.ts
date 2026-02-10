@@ -20,7 +20,7 @@ export class BooksService {
         description: true,
         genres: { name: true },
         tags: { name: true },
-        chapters: { id: true, createdAt: true },
+        chapters: { id: true, createdAt: true, updatedAt: true },
         reviews: { rating: true },
       },
     });
@@ -28,9 +28,10 @@ export class BooksService {
     return books.map((book) => {
       const averageRating = roundAvgRating(book);
       const chapterCount = book.chapters.length;
+      const reviewCount = book.reviews.length;
 
       const lastUpdate = book.chapters.reduce((latest, chapter) => {
-        return chapter.createdAt > latest ? chapter.createdAt : latest;
+        return chapter.updatedAt > latest ? chapter.updatedAt : latest;
       }, new Date(0));
 
       return {
@@ -41,22 +42,39 @@ export class BooksService {
         tags: book.tags.map((tag) => tag.name),
         averageRating,
         chapterCount,
+        reviewCount,
         lastUpdate,
       };
     });
   }
 
   async findOne(id: number): Promise<any> {
-    const book = await this.booksRepository.findOne({
-      where: { id },
-      relations: ['genres', 'tags', 'chapters', 'reviews', 'reviews.user'],
-    });
+    // const book = await this.booksRepository.findOne({
+    //   where: { id },
+    //   relations: ['genres', 'tags', 'chapters', 'reviews', 'reviews.user'],
+    // });
+    const book = await this.booksRepository
+      .createQueryBuilder('book')
+      .leftJoinAndSelect('book.genres', 'genres')
+      .leftJoinAndSelect('book.tags', 'tags')
+      .leftJoinAndSelect('book.reviews', 'reviews')
+      .leftJoinAndSelect('reviews.user', 'user')
+      .leftJoin('book.chapters', 'chapters')
+      .addSelect([
+        'chapters.id',
+        'chapters.title',
+        'chapters.chapterNumber',
+        'chapters.createdAt',
+      ])
+      .where('book.id = :id', { id })
+      .getOne();
 
     if (!book) {
       return null;
     }
 
     const averageRating = roundAvgRating(book);
+    const reviewCount = book.reviews.length;
     const chapterCount = book.chapters.length;
 
     return {
@@ -64,6 +82,7 @@ export class BooksService {
       genres: book.genres.map((genre) => genre.name),
       tags: book.tags.map((tag) => tag.name),
       averageRating,
+      reviewCount,
       chapterCount,
       chapters: book.chapters,
       reviews: book.reviews.map((review) => ({

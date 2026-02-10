@@ -91,6 +91,7 @@ export class SeedService {
           title: `Chapter ${chapter_num}`,
           content: `Content of chapter ${chapter_num} for book ${i}`,
           createdAt: new Date(),
+          updatedAt: new Date(),
           chapterNumber: chapter_num,
         });
       }

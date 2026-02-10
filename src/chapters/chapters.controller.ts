@@ -1,4 +1,11 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+} from '@nestjs/common';
 import { ChaptersService } from './chapters.service';
 
 @Controller('chapters')
@@ -13,5 +20,15 @@ export class ChaptersController {
   @Get('book/:bookId')
   findByBook(@Param('bookId') bookId: string) {
     return this.chaptersService.findByBook(+bookId);
+  }
+
+  @Get(':chapterId')
+  findChapterInfo(@Param('chapterId') chapterId: string) {
+    return this.chaptersService.findChapterInfo(+chapterId);
+  }
+
+  @Patch(':id')
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateDto: any) {
+    return this.chaptersService.update(id, updateDto);
   }
 }
