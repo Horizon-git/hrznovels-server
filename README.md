@@ -1,85 +1,67 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+<p>A server of web application for reading and discovering Chinese web novels (donghua/xianxia). Users can browse novels by genre and tags, read chapters, leave reviews and ratings, and bookmark their favorite stories.</p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+<h1><a href="https://hrznovels-client.vercel.app/">LIVE DEMO</a></h1>
+<p>(Backend hosted on Render.com — initial load may take a moment)</p>
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+<h1><a href="https://github.com/horizon-git/hrznovels-server">SERVER REPO</a></h1>
 
-## Description
+# Features
+<ul>
+  <li>Browse 100+ Chinese web novels with cover images</li>
+  <li>Filter by genres (Fiction, Fantasy, Sci-Fi, Romance, Horror, Adventure)</li>
+  <li>Filter by tags (New Release, Classic, Bestseller, Award-winning, etc.)</li>
+  <li>Search novels by title and description</li>
+  <li>Sort by alphabet, date added, last update, or rating (ASC/DESC)</li>
+  <li>Read chapters with progress tracking</li>
+  <li>Leave reviews and ratings</li>
+  <li>Bookmark favorite novels</li>
+  <li>User authentication and profiles</li>
+</ul>
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+# Technologies Used
 
-## Project setup
+### Frontend
+<ul>
+  <li>Next.js 15 (App Router)</li>
+  <li>React 19</li>
+  <li>TypeScript</li>
+  <li>Redux Toolkit</li>
+  <li>Material-UI (MUI)</li>
+  <li>SCSS Modules</li>
+</ul>
 
+### Backend
+<ul>
+  <li>NestJS</li>
+  <li>TypeScript</li>
+  <li>TypeORM</li>
+  <li>PostgreSQL</li>
+  <li>JWT Authentication</li>
+</ul>
+
+### Deployment
+<ul>
+  <li>Frontend: Vercel</li>
+  <li>Backend: Render.com</li>
+  <li>Database: Neon.tech</li>
+</ul>
+
+# Launch Instructions
+
+### Prerequisites
+- Node.js 18+ and npm
+- PostgreSQL database (or use Neon.tech)
+
+### Frontend Setup
 ```bash
-$ npm install
-```
+git clone https://github.com/horizon-git/hrznovels-client.git
+cd hrznovels-client
+npm install
 
-## Compile and run the project
+# Create .env.local file:
+# NEXT_PUBLIC_API_URL=http://localhost:3001
+# NEXT_PUBLIC_API_HOSTNAME=localhost
+# NEXT_PUBLIC_API_PROTOCOL=http
 
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Run tests
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+npm run dev
+# Open http://localhost:3000
