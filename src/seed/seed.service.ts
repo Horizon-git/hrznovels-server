@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+
 import { User } from '../users/user.entity';
 import { Book } from '../books/book.entity';
 import { Genre } from '../genres/genre.entity';
@@ -25,12 +26,26 @@ export class SeedService {
     private readonly bookmarkRepository: Repository<Bookmark>,
   ) {}
 
+  private readonly localBookCovers = Array.from(
+    { length: 10 },
+    (_, i) => `/uploads/books/book${i + 1}.jpg`,
+  );
+
+  private pickRandom<T>(arr: T[]): T {
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
+
+  private maybeCoverUrl(probabilityHasCover = 0.5): string | null {
+    if (Math.random() > probabilityHasCover) return null;
+    return this.pickRandom(this.localBookCovers);
+  }
+
   async seedUsers() {
     for (let i = 1; i <= 10; i++) {
       await this.userRepository.save({
         username: `user_${i}`,
         email: `user_${i}@example.com`,
-        password: 'password_hash', // Можно сгенерировать хэш пароля
+        password: 'password_hash',
         created_at: new Date(),
       });
     }
@@ -45,6 +60,7 @@ export class SeedService {
       'Horror',
       'Adventure',
     ];
+
     for (const genre of genres) {
       await this.genreRepository.save({ name: genre });
     }
@@ -59,32 +75,35 @@ export class SeedService {
       'Critically Acclaimed',
       'Underground',
     ];
+
     for (const tag of tags) {
       await this.tagRepository.save({ name: tag });
     }
   }
 
   async seedBooks() {
+    // ВАЖНО: не делаем find() в цикле 100 раз
+    const genres = await this.genreRepository.find();
+    const tags = await this.tagRepository.find();
+
     for (let i = 1; i <= 100; i++) {
       const book = await this.bookRepository.save({
         name: `Book Title ${i}`,
         description: `This is a description for book ${i}`,
-        imageUrl: `https://example.com/images/book_${i}.jpg`,
+        imageUrl: this.maybeCoverUrl(0.5), // 50% null, 50% -> одна из 10 картинок
       });
 
-      // Привязка случайного жанра к каждой книге
-      const genres = await this.genreRepository.find();
+      // жанр
       const randomGenre = genres[Math.floor(Math.random() * genres.length)];
-      book.genres = [randomGenre]; // Устанавливаем жанры для книги
+      book.genres = [randomGenre];
       await this.bookRepository.save(book);
 
-      // Привязка случайного тега к каждой книге
-      const tags = await this.tagRepository.find();
+      // тег
       const randomTag = tags[Math.floor(Math.random() * tags.length)];
-      book.tags = [randomTag]; // Устанавливаем теги для книги
+      book.tags = [randomTag];
       await this.bookRepository.save(book);
 
-      // Генерация глав для каждой книги
+      // главы
       for (let chapter_num = 1; chapter_num <= 20; chapter_num++) {
         await this.chapterRepository.save({
           book,
@@ -127,7 +146,6 @@ export class SeedService {
     }
   }
 
-  // Запуск всех сидов
   async runSeeds() {
     await this.seedUsers();
     await this.seedGenres();

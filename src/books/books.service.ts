@@ -18,6 +18,7 @@ export class BooksService {
         id: true,
         name: true,
         description: true,
+        imageUrl: true,
         genres: { name: true },
         tags: { name: true },
         chapters: { id: true, createdAt: true, updatedAt: true },
@@ -38,6 +39,7 @@ export class BooksService {
         id: book.id,
         name: book.name,
         description: book.description,
+        imageUrl: book.imageUrl,
         genres: book.genres.map((genre) => genre.name),
         tags: book.tags.map((tag) => tag.name),
         averageRating,
@@ -49,10 +51,6 @@ export class BooksService {
   }
 
   async findOne(id: number): Promise<any> {
-    // const book = await this.booksRepository.findOne({
-    //   where: { id },
-    //   relations: ['genres', 'tags', 'chapters', 'reviews', 'reviews.user'],
-    // });
     const book = await this.booksRepository
       .createQueryBuilder('book')
       .leftJoinAndSelect('book.genres', 'genres')
@@ -61,6 +59,8 @@ export class BooksService {
       .leftJoinAndSelect('reviews.user', 'user')
       .leftJoin('book.chapters', 'chapters')
       .addSelect([
+        'book.imageUrl',
+
         'chapters.id',
         'chapters.title',
         'chapters.chapterNumber',
@@ -79,6 +79,7 @@ export class BooksService {
 
     return {
       ...book,
+      imageUrl: book.imageUrl,
       genres: book.genres.map((genre) => genre.name),
       tags: book.tags.map((tag) => tag.name),
       averageRating,

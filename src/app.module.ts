@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
+
 import { BooksModule } from './books/books.module';
 import { Book } from './books/book.entity';
 import { BookmarksModule } from './bookmarks/bookmarks.module';
@@ -19,16 +21,30 @@ import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: '123456',
-      database: 'library6',
+      host: process.env.DB_HOST,
+      port: Number(process.env.DB_PORT),
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
       entities: [User, Book, Genre, Tag, Chapter, Review, Bookmark],
       synchronize: true,
+
+      ssl: process.env.DB_SSL === 'true',
+      extra:
+        process.env.DB_SSL === 'true'
+          ? {
+              ssl: {
+                rejectUnauthorized:
+                  process.env.DB_SSL_REJECT_UNAUTHORIZED === 'true',
+              },
+            }
+          : undefined,
     }),
+
     UsersModule,
     AuthModule,
     BooksModule,
